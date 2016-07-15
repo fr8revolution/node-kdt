@@ -212,6 +212,7 @@ function KdTree(points, metric, dimensions) {
     removeNode(node);
   };
 
+  // MK: Added isFeasible delegate function to allow control over which nodes get added to bestNodes
   this.nearest = function (point, maxNodes, maxDistance) {
     var i,
       result,
@@ -231,9 +232,11 @@ function KdTree(points, metric, dimensions) {
         i;
 
       function saveNode(node, distance) {
-        bestNodes.push([node, distance]);
-        if (bestNodes.size() > maxNodes) {
-          bestNodes.pop();
+        if (isFeasible(node)) {
+          bestNodes.push([node, distance]);
+          if (bestNodes.size() > maxNodes) {
+            bestNodes.pop();
+          }
         }
       }
 
